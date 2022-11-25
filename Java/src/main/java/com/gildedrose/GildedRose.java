@@ -7,11 +7,13 @@ class GildedRose {
     Item[] items;
 
     int qualityModifier = 1;
+    int degradeRate;
     public GildedRose(Item[] items) {
         this.items = items;
     }
     void updateQuality() {
         for (Item item : items) {
+            degradeRate = item.name.equals(MANA_CAKE) ? -2 : -1;
             handleQualityChanges(item);
             updateSellIn(item);
         }
@@ -19,14 +21,7 @@ class GildedRose {
     private void handleQualityChanges(Item item) {
         if (!item.name.equals(AGED_BRIE) && !item.name.equals(BACKSTAGE_PASSES)) {
             if (!item.name.equals(SULFURAS)) {
-                if (!item.name.equals(MANA_CAKE)) {
-                    qualityModifier = -1;
-                    ModifyItemQuality(item, qualityModifier);
-                }
-                else {
-                    qualityModifier = -2;
-                    ModifyItemQuality(item, qualityModifier);
-                }
+                ModifyItemQuality(item, degradeRate);
             }
         } else {
             qualityModifier = 1;
@@ -48,8 +43,6 @@ class GildedRose {
         boolean isInRange = newQuality <= 50 && newQuality >= 0;
         if (isInRange) {
             item.quality = newQuality;
-        } else if (item.name.equals(MANA_CAKE) && newQuality == -1) {
-            item.quality = 0;
         }
     }
     private void updateSellIn(Item item) {
@@ -67,14 +60,7 @@ class GildedRose {
         if (!item.name.equals(AGED_BRIE)) {
             if (!item.name.equals(BACKSTAGE_PASSES)) {
                 if (!item.name.equals(SULFURAS)) {
-                    if (!item.name.equals(MANA_CAKE)) {
-                        qualityModifier = -1;
-                        ModifyItemQuality(item, qualityModifier);
-                    }
-                    else {
-                        qualityModifier = -2;
-                        ModifyItemQuality(item, qualityModifier);
-                    }
+                    ModifyItemQuality(item, degradeRate);
                 }
             } else {
                 qualityModifier = -item.quality;
