@@ -8,33 +8,34 @@ class GildedRose {
 
     int qualityModifier = 1;
     int degradeRate;
+    boolean doesDegrade;
     public GildedRose(Item[] items) {
         this.items = items;
     }
     void updateQuality() {
         for (Item item : items) {
             degradeRate = item.name.equals(MANA_CAKE) ? -2 : -1;
+            doesDegrade = !item.name.equals(AGED_BRIE) && !item.name.equals(BACKSTAGE_PASSES) && !item.name.equals(SULFURAS);
             handleQualityChanges(item);
             updateSellIn(item);
         }
     }
     private void handleQualityChanges(Item item) {
-        if (!item.name.equals(AGED_BRIE) && !item.name.equals(BACKSTAGE_PASSES)) {
-            if (!item.name.equals(SULFURAS)) {
-                ModifyItemQuality(item, degradeRate);
-            }
-        } else {
+        if (doesDegrade) {
+            ModifyItemQuality(item, degradeRate);
+        }
+        if(item.name.equals(AGED_BRIE) || item.name.equals(BACKSTAGE_PASSES)) {
             qualityModifier = 1;
             ModifyItemQuality(item, qualityModifier);
-            if (item.name.equals(BACKSTAGE_PASSES)) {
-                if (item.sellIn < 11) {
-                    qualityModifier = 1;
-                    ModifyItemQuality(item, qualityModifier);
-                }
-                if (item.sellIn < 6) {
-                    qualityModifier = 1;
-                    ModifyItemQuality(item, qualityModifier);
-                }
+        }
+        if (item.name.equals(BACKSTAGE_PASSES)) {
+            if (item.sellIn < 11) {
+                qualityModifier = 1;
+                ModifyItemQuality(item, qualityModifier);
+            }
+            if (item.sellIn < 6) {
+                qualityModifier = 1;
+                ModifyItemQuality(item, qualityModifier);
             }
         }
     }
