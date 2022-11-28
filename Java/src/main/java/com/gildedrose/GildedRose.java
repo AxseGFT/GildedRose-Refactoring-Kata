@@ -11,6 +11,15 @@ class GildedRose {
     public GildedRose(Item[] items) {
         this.items = items;
     }
+
+    public Item[] getItems() {
+        return items;
+    }
+
+    public void setItems(Item[] items) {
+        this.items = items;
+    }
+
     void updateQuality() {
         for (Item item : items) {
             boolean isExpired = item.sellIn < 1;
